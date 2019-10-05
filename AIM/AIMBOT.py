@@ -169,7 +169,6 @@ def main():
     curr_best_alltime = 1000 #arbitrary large number
     prev_best_alltime = 0
     spot = 0
-    best_moves = []
     best_y = []
     
 
@@ -178,9 +177,7 @@ def main():
         Avg_dist = 0
         Avg_y = 0
         Gene_pool = []
-        
-        
-           
+   
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -214,19 +211,15 @@ def main():
                     curr_best_alltime = Gen[i].y
                     spot = i
 
-            if(Num_gen%5 == 0):
+            if(Num_gen%5 == 0): #every 5 generations a health boost is given
                 health+=100  
                  
             Avg_dist = Avg_dist/len_gen
             Avg_y = Avg_y/len_gen
             best_y.append(Avg_y)
 
-            Avg_y = min(best_y)
-
-            if(curr_best_alltime < prev_best_alltime):
-                best_moves = Gen[spot].bot_moves
-
-         
+            Avg_y = min(best_y)# considers the best all_time average as average 
+            
             print("Avg_dist: ",Avg_dist, " | Avg y", Avg_y, "| best all time: ",curr_best_alltime," | Generation: ",Num_gen)
  
             for i in range(len(Gen)):
@@ -253,15 +246,13 @@ def main():
                     Gen[i].fitness+=50
 
                 for j in range(Gen[i].fitness):
-                    Gene_pool.append(Gen[i].bot_moves)
+                    Gene_pool.append(Gen[i].bot_moves) #appends the genes DNA the same amount as its fitness
 
-            for i in range(30): #appends the best bot moves an extra 30 times to the gene pool, allows for quicker finishing time
-                Gene_pool.append(best_moves) 
-            
+
             Num_gen+=1
             del Gen[:]
-            make_bots(Gene_pool,health)
-
+            make_bots(Gene_pool,health) #creates new bots, for next generation
+	
             C = circle(20,505,1.25)
             C2 = circle(40,50,1)
             C3 = circle(25,574,1.25)
